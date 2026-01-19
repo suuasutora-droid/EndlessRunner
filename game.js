@@ -54,7 +54,7 @@ function spawnPlatform() {
 let keys = {};
 window.addEventListener("keydown", (e) => {
   keys[e.code] = true;
-  if (e.code === "Space") {
+  if (e.code === "Space" || e.key === " ") {
     if (!gameOver && player.onGround) {
       player.vy = JUMP_POWER;
       player.onGround = false;
@@ -95,18 +95,20 @@ function update() {
 
   // 足場との当たり判定（簡易）
   for (const p of platforms) {
-    const isWithinX =
-      player.x + player.width > p.x &&
-      player.x < p.x + p.width;
-    const isFallingOnTop =
-      player.y + player.height <= p.y &&
-      player.y + player.height + player.vy >= p.y;
+const isWithinX =
+  player.x + player.width > p.x &&
+  player.x < p.x + p.width;
 
-    if (isWithinX && isFallingOnTop) {
-      player.y = p.y - player.height;
-      player.vy = 0;
-      player.onGround = true;
-    }
+const isFallingOnTop =
+  player.vy >= 0 &&                     // 下向きに落ちている
+  player.y + player.height <= p.y &&    // プレイヤーの底が足場より上
+  player.y + player.height + player.vy >= p.y; // 次のフレームで足場に到達
+
+if (isWithinX && isFallingOnTop) {
+  player.y = p.y - player.height;
+  player.vy = 0;
+  player.onGround = true;
+}
   }
 
   // 画面外に落ちたらゲームオーバー
@@ -174,3 +176,4 @@ player.y = 100;
 initPlatforms();
 
 update();
+
