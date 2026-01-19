@@ -1,3 +1,4 @@
+window.focus();
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -171,4 +172,5 @@ function restart() {
 // 初期化してスタート
 player.y = 100;
 initPlatforms();
+
 update();
